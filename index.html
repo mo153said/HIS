@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام HIS الموزع - واجهة التحكم</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css">
+    <style>
+        body { background-color: #f0f2f5; font-family: 'Segoe UI', sans-serif; padding: 40px 0; }
+        .main-card { border: none; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin-bottom: 30px; }
+        .card-header { border-radius: 15px 15px 0 0 !important; font-weight: bold; font-size: 1.2rem; }
+        .btn-custom { border-radius: 10px; padding: 10px 25px; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2 class="text-center mb-5 text-primary">نظام إدارة المستشفيات الموزع (Cairo & Alex)</h2>
+
+    <div class="row g-4">
+        <div class="col-md-6">
+            <div class="card main-card">
+                <div class="card-header bg-primary text-white">➕ تسجيل مريض وحجز ميعاد</div>
+                <div class="card-body p-4">
+                    <form id="registerForm">
+                        <div class="mb-3">
+                            <label class="form-label">اسم المريض (قاعدة القاهرة)</label>
+                            <input type="text" id="reg_name" class="form-control" placeholder="الاسم بالكامل" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">الرقم القومي</label>
+                            <input type="text" id="reg_national" class="form-control" placeholder="14 رقم" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">اختر المستشفى (Location)</label>
+                            <select id="reg_hospital" class="form-select border-primary" required>
+                                <option value="1">فرع القاهرة الرئيسي</option>
+                                <option value="2">فرع الإسكندرية</option>
+                            </select>
+                        </div>
+
+                        <hr>
+                        <div class="mb-3">
+                            <label class="form-label">اختر الدكتور (قاعدة الإسكندرية)</label>
+                            <select id="reg_doctor" class="form-select">
+                                <option value="1">د. أحمد - جراحة قلب</option>
+                                <option value="2">د. سارة - أطفال</option>
+                                <option value="3">د. هاني - عظام</option>
+                            </select>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary btn-custom w-100">تسجيل وحفظ موزع</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card main-card">
+                <div class="card-header bg-success text-white">🔍 استعلام عن موعد مريض</div>
+                <div class="card-body p-4">
+                    <div class="mb-4">
+                        <label class="form-label">ابحث برقم المريض (ID)</label>
+                        <div class="input-group">
+                            <input type="number" id="search_id" class="form-control" placeholder="أدخل ID المريض">
+                            <button class="btn btn-success" onclick="searchAppointment()">بحث</button>
+                        </div>
+                    </div>
+                    
+                    <div id="resultBox" class="p-3 border rounded bg-light d-none">
+                        <h6 class="border-bottom pb-2">نتيجة الاستعلام الموزع:</h6>
+                        <p class="mb-1"><strong>المريض:</strong> <span id="res_patient">---</span></p>
+                        <p class="mb-1"><strong>المستشفى:</strong> <span id="res_hospital" class="text-success fw-bold">---</span></p>
+                        <p class="mb-0"><strong>الدكتور المسؤول:</strong> <span id="res_doctor" class="text-danger">---</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const API_URL = "http://localhost:4000/api";
+
+    // 1. وظيفة التسجيل 
+    document.getElementById('registerForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const data = {
+            name: document.getElementById('reg_name').value,
+            national_id: document.getElementById('reg_national').value,
+            hospital_id: document.getElementById('reg_hospital').value, // بنبعت الـ ID (1 أو 2)
+            doctor_id: document.getElementById('reg_doctor').value
+        };
+
+        try {
+            const response = await fetch(`${API_URL}/register-distributed`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            const result = await response.json();
+            
+            if(response.ok) {
+                alert("✅ " + result.message);
+                e.target.reset();
+            } else {
+                alert("❌ " + result.message);
+            }
+        } catch (error) {
+            alert("❌ خطأ: تأكد من تشغيل السيرفرات");
+        }
+    });
+
+    // 2. وظيفة البحث 
+    async function searchAppointment() {
+        const id = document.getElementById('search_id').value;
+        if(!id) return alert("من فضلك أدخل ID المريض");
+
+        try {
+            const response = await fetch(`${API_URL}/search-distributed/${id}`);
+            const data = await response.json();
+            
+            if(response.ok) {
+                document.getElementById('resultBox').classList.remove('d-none');
+                document.getElementById('res_patient').innerText = data.patient_name;
+                document.getElementById('res_hospital').innerText = data.hospital_name; // بييجي من الـ Join في القاهرة
+                
+                document.getElementById('res_doctor').innerHTML = `
+                    <span class="text-primary">${data.doctor_name}</span> 
+                    <br> 
+                    <small class="text-muted">تاريخ الحجز: ${data.appointment_date}</small>
+                `;
+            } else {
+                alert("❌ " + data.message);
+                document.getElementById('resultBox').classList.add('d-none');
+            }
+        } catch (error) {
+            alert("❌ فشل البحث: تأكد من تشغيل السيرفرات");
+        }
+    }
+</script>
+
+</body>
+</html>
