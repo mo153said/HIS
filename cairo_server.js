@@ -20,6 +20,7 @@ app.post('/api/cairo/register', (req, res) => {
     console.log(`[DATA] Patient: ${name}, Hospital ID: ${hospital_id}`);
 
     // تعديل الـ SQL ليستخدم Hospital_ID
+    //git commit -m "SCRUM-14 Create a patient database and table (column: ID, Name, National_ID)"
     const sql = "INSERT INTO Patient (Name, National_ID, Hospital_ID) VALUES (?, ?, ?)";
     dbCairo.query(sql, [name, national_id, hospital_id], (err, result) => {
         if (err) {
