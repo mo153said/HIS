@@ -30,7 +30,7 @@ app.post('/api/cairo/register', (req, res) => {
         res.json({ patient_id: result.insertId });
     });
 });
-
+//git commit -m "SCRUM-19 Create a hospital table and link it to the patient using a Foreign Key."
 // 2. استقبال طلب بحث (تعديل: عمل JOIN لجلب اسم المستشفى من جدولها)
 app.get('/api/cairo/patient/:id', (req, res) => {
     const patientId = req.params.id;
@@ -40,7 +40,7 @@ app.get('/api/cairo/patient/:id', (req, res) => {
         SELECT p.Name, h.Hospital_Name 
         FROM Patient p 
         JOIN Hospital h ON p.Hospital_ID = h.Hospital_ID 
-        WHERE p.Patient_ID = ?`;
+        WHERE p.Patient_ID = ?`;//git commit -m "SCRUM-19 Create a hospital table and link it to the patient using a Foreign Key."
 
     dbCairo.query(sql, [patientId], (err, rows) => {
         if (err) return res.status(500).json(err);
