@@ -94,7 +94,7 @@ app.get('/api/search-distributed/:id', async (req, res) => {
         res.status(500).json({ message: "المريض غير موجود أو السيرفرات مغلقة" }); 
     }
 });
-
+//git commit -m "SCRUM-33 Setup Alexandria API Node on Port 4000"
 const PORT = 4000;
 app.listen(PORT, () => {
     console.log(`🚀 Alexandria Server (Coordinator) running on port ${PORT}`);
