@@ -20,7 +20,7 @@ dbAlex.connect((err) => {
         console.log("✅ سيرفر الإسكندرية متصل بقاعدة بيانات (Branch_B_DB) بنجاح!");
     }
 });
-
+//git commit -m "SCRUM-18 كموظف، أريد اختيار المستشفى التي سيتوجه إليها المريض لضمان توفر مكان"
 // 1. عملية التسجيل الموزعة (تعديل: استقبال hospital_id وتمريره للقاهرة)
 app.post('/api/register-distributed', async (req, res) => {
     const { name, national_id, hospital_id, doctor_id } = req.body;
