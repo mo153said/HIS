@@ -57,5 +57,5 @@ app.get('/api/cairo/patient/:id', (req, res) => {
         });
     });
 });
-
+//git commit -m "SCRUM-32 Setup Cairo API Node on Port 3000"
 app.listen(3000, () => console.log("✅ Cairo Server (Port 3000) is running..."));
