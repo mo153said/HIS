@@ -78,6 +78,7 @@ app.get('/api/search-distributed/:id', async (req, res) => {
 
             if (results.length > 0) {
                 // تجميع البيانات من السيرفرين
+                //git commit -m "SCRUM-35 Shared Data Interface (Endpoints)"
                 res.json({
                     patient_name: cairoRes.data.name,        // من القاهرة
                     hospital_name: cairoRes.data.hospital_name, // من القاهرة (جديد)
