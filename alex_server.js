@@ -47,7 +47,7 @@ app.post('/api/register-distributed', async (req, res) => {
             if (err) {
                 console.error("❌ خطأ في جدول المواعيد بإسكندرية:", err);
                 return res.status(500).json(err);
-            }
+            }//git commit -m "SCRUM-34 Implement Cross-Port Request Logic"
             console.log("✨ تمت العملية الموزعة بالكامل!");
             res.json({ message: `تم التسجيل بنجاح! ID المريض: ${newPatientId}` });
         });
