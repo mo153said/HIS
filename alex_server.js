@@ -65,7 +65,7 @@ app.get('/api/search-distributed/:id', async (req, res) => {
 
         // نطلب البيانات من القاهرة (دلوقتي القاهرة هترجع الاسم + اسم المستشفى بفضل الـ JOIN)
         const cairoRes = await axios.get(`http://localhost:3000/api/cairo/patient/${patientId}`);
-        
+        //git commit -m "SCRUM-23 As an employee, I want to select the doctor's name and schedule an appointment for the patient."
         // نجيب بيانات الدكتور والموعد من إسكندرية (بدون عمود Hospital_Name)
         const query = `
             SELECT a.App_Date, d.Name as Doctor_Name 
