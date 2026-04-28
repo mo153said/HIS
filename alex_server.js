@@ -36,7 +36,7 @@ app.post('/api/register-distributed', async (req, res) => {
             national_id, 
             hospital_id 
         });
-        
+        //git commit -m "SCRUM-26 Linking data together so that the patient is connected to a doctor, hospital, and appointment."
         const newPatientId = cairoRes.data.patient_id;
 
         console.log(`📥 استلمت ID من القاهرة: ${newPatientId}. جاري حجز الموعد في إسكندرية...`);
