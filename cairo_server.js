@@ -42,7 +42,7 @@ app.get('/api/cairo/patient/:id', (req, res) => {
         FROM Patient p 
         JOIN Hospital h ON p.Hospital_ID = h.Hospital_ID 
         WHERE p.Patient_ID = ?`;//git commit -m "SCRUM-19 Create a hospital table and link it to the patient using a Foreign Key."
-
+//git commit -m "SCRUM-36 Global Record Synchronization"
     dbCairo.query(sql, [patientId], (err, rows) => {
         if (err) return res.status(500).json(err);
         
@@ -50,7 +50,7 @@ app.get('/api/cairo/patient/:id', (req, res) => {
             console.log(`[SEARCH] Patient ID ${patientId} not found.`);
             return res.status(404).json({ message: "غير موجود" });
         }
-        
+        //git commit -m "SCRUM-31 View results on the "Booking Details" page"
         console.log(`[SEARCH] Found: ${rows[0].Name} at ${rows[0].Hospital_Name}`);
         res.json({
             name: rows[0].Name,
