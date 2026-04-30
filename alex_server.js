@@ -85,7 +85,7 @@ app.get('/api/search-distributed/:id', async (req, res) => {
                     hospital_name: cairoRes.data.hospital_name, // من القاهرة (جديد)
                     doctor_name: results[0].Doctor_Name,     // من إسكندرية
                     appointment_date: results[0].App_Date    // من إسكندرية
-                });
+                });//git commit -m "SCRUM-37 Distributed Port Connectivity Testing"
                 console.log("✅ تم استرجاع البيانات بنجاح من المصدرين.");
             } else {
                 res.status(404).json({ message: "المريض مسجل في القاهرة ولكن ليس لديه موعد في إسكندرية" });
